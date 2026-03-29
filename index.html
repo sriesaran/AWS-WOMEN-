@@ -1,1 +1,383 @@
+\<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HerDay AI – Your Daily Productivity Companion</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- App Wrapper -->
+  <div id="app">
+
+    <!-- ===== LANDING PAGE ===== -->
+    <section id="page-landing" class="page active">
+      <div class="landing-hero">
+        <div class="landing-content">
+          <div class="logo-mark">✦</div>
+          <h1 class="landing-title">HerDay <span>AI</span></h1>
+          <p class="landing-subtitle">Your intelligent daily companion — plan smarter, live better, stay safe.</p>
+          <div class="landing-features">
+            <span>✓ AI Daily Planning</span>
+            <span>✓ Wellness Tracking</span>
+            <span>✓ Safety Center</span>
+            <span>✓ Habit Building</span>
+          </div>
+          <div class="landing-actions">
+            <button class="btn-primary" onclick="showPage('page-signup')">Get Started</button>
+            <button class="btn-ghost" onclick="showPage('page-login')">Sign In</button>
+          </div>
+        </div>
+        <div class="landing-visual">
+          <div class="visual-card card-1"><span>🌸</span><p>Good morning, you've got this!</p></div>
+          <div class="visual-card card-2"><span>📋</span><p>3 tasks planned for today</p></div>
+          <div class="visual-card card-3"><span>💧</span><p>Hydration: 4/8 glasses</p></div>
+          <div class="visual-card card-4"><span>🔥</span><p>7-day streak!</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== LOGIN PAGE ===== -->
+    <section id="page-login" class="page">
+      <div class="auth-container">
+        <div class="auth-header">
+          <div class="logo-mark small">✦</div>
+          <h2>Welcome Back</h2>
+          <p>Sign in to your HerDay AI account</p>
+        </div>
+        <form id="login-form" class="auth-form" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="login-email" placeholder="you@example.com" required />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="login-password" placeholder="••••••••" required />
+          </div>
+          <button type="submit" class="btn-primary full">Sign In</button>
+        </form>
+        <p class="auth-switch">Don't have an account? <a onclick="showPage('page-signup')">Sign Up</a></p>
+        <button class="btn-ghost small" onclick="showPage('page-landing')">← Back</button>
+      </div>
+    </section>
+
+    <!-- ===== SIGNUP PAGE ===== -->
+    <section id="page-signup" class="page">
+      <div class="auth-container">
+        <div class="auth-header">
+          <div class="logo-mark small">✦</div>
+          <h2>Create Account</h2>
+          <p>Join thousands of women planning smarter</p>
+        </div>
+        <form id="signup-form" class="auth-form" onsubmit="handleSignup(event)">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="signup-name" placeholder="Your name" required />
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="signup-email" placeholder="you@example.com" required />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="signup-password" placeholder="Min 6 characters" required minlength="6" />
+          </div>
+          <button type="submit" class="btn-primary full">Create Account</button>
+        </form>
+        <p class="auth-switch">Already have an account? <a onclick="showPage('page-login')">Sign In</a></p>
+        <button class="btn-ghost small" onclick="showPage('page-landing')">← Back</button>
+      </div>
+    </section>
+
+    <!-- ===== ONBOARDING ===== -->
+    <section id="page-onboarding" class="page">
+      <div class="onboarding-container">
+        <div class="onboarding-progress">
+          <div class="progress-bar"><div id="onboarding-progress-fill" class="progress-fill"></div></div>
+          <span id="onboarding-step-label">Step 1 of 4</span>
+        </div>
+        <div id="onboarding-steps">
+          <!-- Steps injected by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MAIN APP (after login) ===== -->
+    <div id="main-app" class="hidden">
+      <!-- Sidebar Nav -->
+      <nav id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+          <div class="logo-mark small">✦</div>
+          <span class="sidebar-title">HerDay AI</span>
+          <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+        </div>
+        <div class="sidebar-user">
+          <div class="user-avatar" id="nav-avatar">H</div>
+          <div>
+            <p class="user-name" id="nav-username">Her</p>
+            <p class="user-role" id="nav-role">Entrepreneur</p>
+          </div>
+        </div>
+        <ul class="nav-links">
+          <li><a onclick="switchTab('dashboard')" class="nav-link active" data-tab="dashboard"><span>🏠</span> Dashboard</a></li>
+          <li><a onclick="switchTab('tasks')" class="nav-link" data-tab="tasks"><span>📋</span> Tasks</a></li>
+          <li><a onclick="switchTab('planner')" class="nav-link" data-tab="planner"><span>🤖</span> AI Planner</a></li>
+          <li><a onclick="switchTab('calendar')" class="nav-link" data-tab="calendar"><span>📅</span> Calendar</a></li>
+          <li><a onclick="switchTab('wellness')" class="nav-link" data-tab="wellness"><span>🌿</span> Wellness</a></li>
+          <li><a onclick="switchTab('habits')" class="nav-link" data-tab="habits"><span>🔥</span> Habits</a></li>
+          <li><a onclick="switchTab('goals')" class="nav-link" data-tab="goals"><span>🎯</span> Goals</a></li>
+          <li><a onclick="switchTab('safety')" class="nav-link" data-tab="safety"><span>🛡️</span> Safety</a></li>
+          <li><a onclick="switchTab('chat')" class="nav-link" data-tab="chat"><span>💬</span> AI Chat</a></li>
+          <li><a onclick="switchTab('analytics')" class="nav-link" data-tab="analytics"><span>📊</span> Analytics</a></li>
+          <li><a onclick="switchTab('settings')" class="nav-link" data-tab="settings"><span>⚙️</span> Settings</a></li>
+        </ul>
+        <button class="btn-logout" onclick="handleLogout()">Sign Out</button>
+      </nav>
+
+      <!-- Overlay for mobile sidebar -->
+      <div id="sidebar-overlay" class="sidebar-overlay hidden" onclick="toggleSidebar()"></div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Top Bar -->
+        <header class="topbar">
+          <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+          <div class="topbar-title" id="topbar-title">Dashboard</div>
+          <div class="topbar-actions">
+            <button class="sos-btn" onclick="triggerSOS()">🆘 SOS</button>
+          </div>
+        </header>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+
+          <!-- DASHBOARD -->
+          <div id="tab-dashboard" class="tab active">
+            <div class="dashboard-welcome">
+              <div>
+                <h2 id="dash-greeting">Good morning!</h2>
+                <p id="dash-date"></p>
+              </div>
+              <div class="dash-weather">🌸 Have a wonderful day</div>
+            </div>
+            <div class="dashboard-grid">
+              <div class="dash-card wide">
+                <h3>Today's Focus</h3>
+                <div id="dash-top-tasks"></div>
+                <button class="btn-sm" onclick="switchTab('tasks')">View All Tasks →</button>
+              </div>
+              <div class="dash-card">
+                <h3>Wellness Check-in</h3>
+                <div id="dash-wellness-checkin">
+                  <p>How are you feeling today?</p>
+                  <div class="mood-quick">
+                    <button onclick="quickMood('😊')">😊</button>
+                    <button onclick="quickMood('😐')">😐</button>
+                    <button onclick="quickMood('😔')">😔</button>
+                    <button onclick="quickMood('😤')">😤</button>
+                    <button onclick="quickMood('😴')">😴</button>
+                  </div>
+                </div>
+              </div>
+              <div class="dash-card">
+                <h3>Habit Streaks</h3>
+                <div id="dash-habits"></div>
+              </div>
+              <div class="dash-card wide">
+                <h3>AI Daily Plan</h3>
+                <div id="dash-ai-plan"></div>
+                <button class="btn-sm" onclick="switchTab('planner')">Full Planner →</button>
+              </div>
+              <div class="dash-card">
+                <h3>Progress Today</h3>
+                <div id="dash-progress"></div>
+              </div>
+              <div class="dash-card">
+                <h3>Quick Add</h3>
+                <div class="quick-add">
+                  <input type="text" id="quick-task-input" placeholder="Add a quick task..." />
+                  <button class="btn-primary" onclick="quickAddTask()">Add</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TASKS -->
+          <div id="tab-tasks" class="tab">
+            <div class="section-header">
+              <h2>Task Manager</h2>
+              <button class="btn-primary" onclick="openTaskModal()">+ New Task</button>
+            </div>
+            <div class="task-filters">
+              <input type="text" id="task-search" placeholder="🔍 Search tasks..." oninput="renderTasks()" />
+              <select id="task-filter-priority" onchange="renderTasks()">
+                <option value="">All Priorities</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+              <select id="task-filter-category" onchange="renderTasks()">
+                <option value="">All Categories</option>
+                <option value="work">Work</option>
+                <option value="study">Study</option>
+                <option value="home">Home</option>
+                <option value="family">Family</option>
+                <option value="self-care">Self-Care</option>
+                <option value="health">Health</option>
+                <option value="personal">Personal</option>
+              </select>
+              <select id="task-filter-status" onchange="renderTasks()">
+                <option value="">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div>
+            <div id="task-list"></div>
+          </div>
+
+          <!-- AI PLANNER -->
+          <div id="tab-planner" class="tab">
+            <div class="section-header">
+              <h2>AI Daily Planner</h2>
+              <button class="btn-primary" onclick="generatePlan()">✨ Generate Plan</button>
+            </div>
+            <div id="planner-content"></div>
+          </div>
+
+          <!-- CALENDAR -->
+          <div id="tab-calendar" class="tab">
+            <div class="section-header">
+              <h2>Calendar</h2>
+            </div>
+            <div id="calendar-container"></div>
+            <div id="calendar-events"></div>
+          </div>
+
+          <!-- WELLNESS -->
+          <div id="tab-wellness" class="tab">
+            <div class="section-header">
+              <h2>Wellness Tracker</h2>
+              <button class="btn-primary" onclick="openWellnessModal()">+ Log Today</button>
+            </div>
+            <div id="wellness-content"></div>
+          </div>
+
+          <!-- HABITS -->
+          <div id="tab-habits" class="tab">
+            <div class="section-header">
+              <h2>Habit Tracker</h2>
+              <button class="btn-primary" onclick="openHabitModal()">+ New Habit</button>
+            </div>
+            <div id="habits-content"></div>
+          </div>
+
+          <!-- GOALS -->
+          <div id="tab-goals" class="tab">
+            <div class="section-header">
+              <h2>Goals Tracker</h2>
+              <button class="btn-primary" onclick="openGoalModal()">+ New Goal</button>
+            </div>
+            <div id="goals-content"></div>
+          </div>
+
+          <!-- SAFETY -->
+          <div id="tab-safety" class="tab">
+            <div class="section-header">
+              <h2>Safety Center</h2>
+            </div>
+            <div id="safety-content"></div>
+          </div>
+
+          <!-- AI CHAT -->
+          <div id="tab-chat" class="tab">
+            <div class="chat-container">
+              <div class="chat-header">
+                <div class="chat-avatar">✦</div>
+                <div>
+                  <h3>Hera – Your AI Assistant</h3>
+                  <p class="online-status">● Online</p>
+                </div>
+              </div>
+              <div id="chat-messages" class="chat-messages"></div>
+              <div class="chat-suggestions" id="chat-suggestions"></div>
+              <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Ask Hera anything..." onkeydown="if(event.key==='Enter') sendChat()" />
+                <button class="btn-primary" onclick="sendChat()">Send</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ANALYTICS -->
+          <div id="tab-analytics" class="tab">
+            <div class="section-header">
+              <h2>Analytics & Insights</h2>
+            </div>
+            <div id="analytics-content"></div>
+          </div>
+
+          <!-- SETTINGS -->
+          <div id="tab-settings" class="tab">
+            <div class="section-header">
+              <h2>Settings</h2>
+            </div>
+            <div id="settings-content"></div>
+          </div>
+
+        </div><!-- end tab-content -->
+      </div><!-- end main-content -->
+    </div><!-- end main-app -->
+
+  </div><!-- end app -->
+
+  <!-- ===== MODALS ===== -->
+  <div id="modal-overlay" class="modal-overlay hidden" onclick="closeModal(event)">
+    <div id="modal-box" class="modal-box" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <!-- ===== FLOATING ASSISTANT WIDGET ===== -->
+  <div id="fab-widget">
+    <!-- Toggle Button -->
+    <button id="fab-btn" onclick="toggleFAB()" aria-label="Open HerDay Assistant">
+      <span id="fab-icon">✦</span>
+      <span id="fab-badge" class="fab-badge hidden">1</span>
+    </button>
+
+    <!-- Chat Panel -->
+    <div id="fab-panel" class="fab-panel hidden">
+      <div class="fab-header">
+        <div class="fab-avatar">✦</div>
+        <div class="fab-header-info">
+          <span class="fab-name">Hera Assistant</span>
+          <span class="fab-status">● Always here for you</span>
+        </div>
+        <button class="fab-close" onclick="toggleFAB()">✕</button>
+      </div>
+
+      <div id="fab-messages" class="fab-messages"></div>
+
+      <div class="fab-quick-btns" id="fab-quick-btns"></div>
+
+      <div class="fab-input-row">
+        <input
+          type="text"
+          id="fab-input"
+          placeholder="Ask me anything about HerDay…"
+          onkeydown="if(event.key==='Enter') sendFAB()"
+          autocomplete="off"
+        />
+        <button class="fab-send" onclick="sendFAB()">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
 
